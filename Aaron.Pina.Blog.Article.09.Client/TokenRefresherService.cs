@@ -1,4 +1,5 @@
 using Aaron.Pina.Blog.Article._09.Shared.Responses;
+using Aaron.Pina.Blog.Article._09.Shared;
 
 namespace Aaron.Pina.Blog.Article._09.Client;
 
@@ -32,7 +33,8 @@ public class TokenRefresherService(
                         continue;
                     }
                     var client = factory.CreateClient("server-api");
-                    var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:5001/refresh");
+                    var url = $"{Api.UrlFor(Api.Audience.Server.Name)}/refresh";
+                    var request = new HttpRequestMessage(HttpMethod.Post, url);
                     request.Content = new FormUrlEncodedContent([
                         new KeyValuePair<string, string>("refresh_token", store.RefreshToken),
                         new KeyValuePair<string, string>("audience", store.Audience)

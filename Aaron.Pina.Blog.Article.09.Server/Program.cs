@@ -32,8 +32,8 @@ using (var scope = app.Services.CreateScope())
 app.MapGet("/.well-known/openid-configuration", () => Results.Json(
         new
         {
-            Issuer  = "https://localhost:5001",
-            JwksUri = "https://localhost:5001/.well-known/jwks.json"
+            Issuer  = Api.UrlFor(Api.Audience.Server.Name),
+            JwksUri = $"{Api.UrlFor(Api.Audience.Server.Name)}/.well-known/jwks.json"
         },
         new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower }))
    .AllowAnonymous();

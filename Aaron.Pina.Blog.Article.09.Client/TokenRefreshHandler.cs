@@ -1,4 +1,5 @@
 using Aaron.Pina.Blog.Article._09.Shared.Responses;
+using Aaron.Pina.Blog.Article._09.Shared;
 using System.Net.Http.Headers;
 using System.Net;
 
@@ -21,7 +22,8 @@ public class TokenRefreshHandler(TokenStore store) : DelegatingHandler
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", store.AccessToken);
                 return await base.SendAsync(request, ct);
             }
-            var refreshRequest = new HttpRequestMessage(HttpMethod.Post, "https://localhost:5001/refresh");
+            var url = $"{Api.UrlFor(Api.Audience.Server.Name)}/refresh";
+            var refreshRequest = new HttpRequestMessage(HttpMethod.Post, url);
             refreshRequest.Content = new FormUrlEncodedContent([
                 new KeyValuePair<string, string>("refresh_token", store.RefreshToken),
                 new KeyValuePair<string, string>("audience", store.Audience)

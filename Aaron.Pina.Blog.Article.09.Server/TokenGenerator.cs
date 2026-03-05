@@ -1,3 +1,4 @@
+using Aaron.Pina.Blog.Article._09.Shared;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
@@ -22,7 +23,7 @@ public static class TokenGenerator
             IssuedAt = now,
             Audience = audience,
             Expires = now.Add(expiresIn),
-            Issuer = "https://localhost:5001",
+            Issuer = Api.UrlFor(Api.Audience.Server.Name),
             Subject = new ClaimsIdentity([
                 new Claim("role", role),
                 new Claim("jti", jti.ToString()),
