@@ -108,10 +108,7 @@ app.MapPost("/refresh", async
     {
         var refreshToken = context.Request.Form["refresh_token"].FirstOrDefault();
         if (string.IsNullOrEmpty(refreshToken)) return Results.BadRequest();
-        var audience = context.Request.Form["audience"].FirstOrDefault();
-        if (string.IsNullOrWhiteSpace(audience) || !Api.IsValidTarget(audience))
-            return Results.BadRequest("Invalid audience");
-        var token = tokenRepo.TryGetTokenByRefreshTokenAndAudience(refreshToken, audience);
+        var token = tokenRepo.TryGetTokenByRefreshToken(refreshToken);
         if (token is null) return Results.BadRequest();
         if (token.RefreshTokenExpiresAt < DateTime.UtcNow)
         {
@@ -128,7 +125,7 @@ app.MapPost("/refresh", async
         var signingKey = await keyManager.GetOrCreateSigningKeyAsync();
         var newRefreshToken = TokenGenerator.GenerateRefreshToken();
         var accessToken = TokenGenerator.GenerateToken(
-            signingKey, jti, token.UserId, user.Role, audience, now, config.Value.AccessTokenLifetime);
+            signingKey, jti, token.UserId, user.Role, token.Audience, now, config.Value.AccessTokenLifetime);
         var response = new TokenResponse(
             jti, accessToken, newRefreshToken, config.Value.AccessTokenLifetime.TotalMinutes);
         token.RefreshTokenExpiresAt = now.Add(config.Value.RefreshTokenLifetime);
