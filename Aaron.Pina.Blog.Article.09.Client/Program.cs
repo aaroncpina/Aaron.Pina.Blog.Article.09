@@ -15,11 +15,11 @@ builder.Services.AddHostedService<TokenRefresherService>();
 builder.Services.AddTransient(Configuration.TokenServer.TokenRefreshHandlerFactory);
 
 foreach (var role in Roles.ValidRoles)
-foreach (var (name, port) in Api.Targets)
+foreach (var (audience, port) in Api.Targets)
 {
-    builder.Services.AddHttpClient($"{role}-{name}-api", Configuration.TokenServer.HttpClientSettings(port))
+    builder.Services.AddHttpClient($"{role}-{audience}-api", Configuration.TokenServer.HttpClientSettings(port))
                     .ConfigurePrimaryHttpMessageHandler(Configuration.TokenServer.HttpMessageHandlerSettings)
-                    .AddHttpMessageHandler(Configuration.TokenServer.HttpMessageHandlerFor(role, name));
+                    .AddHttpMessageHandler(Configuration.TokenServer.HttpMessageHandlerFor(role, audience));
 }
 
 var app = builder.Build();

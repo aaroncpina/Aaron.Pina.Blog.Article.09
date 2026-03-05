@@ -25,8 +25,7 @@ public class TokenRefreshHandler(TokenStore store) : DelegatingHandler
             var url = $"{Api.UrlFor(Api.Audience.Server.Name)}/refresh";
             var refreshRequest = new HttpRequestMessage(HttpMethod.Post, url);
             refreshRequest.Content = new FormUrlEncodedContent([
-                new KeyValuePair<string, string>("refresh_token", store.RefreshToken),
-                new KeyValuePair<string, string>("audience", store.Audience)
+                new KeyValuePair<string, string>("refresh_token", store.RefreshToken)
             ]);
             using var refreshResponse = await base.SendAsync(refreshRequest, ct);
             if (!refreshResponse.IsSuccessStatusCode) return response;

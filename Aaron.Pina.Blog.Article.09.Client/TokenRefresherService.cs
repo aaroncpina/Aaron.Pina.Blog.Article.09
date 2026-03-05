@@ -36,8 +36,7 @@ public class TokenRefresherService(
                     var url = $"{Api.UrlFor(Api.Audience.Server.Name)}/refresh";
                     var request = new HttpRequestMessage(HttpMethod.Post, url);
                     request.Content = new FormUrlEncodedContent([
-                        new KeyValuePair<string, string>("refresh_token", store.RefreshToken),
-                        new KeyValuePair<string, string>("audience", store.Audience)
+                        new KeyValuePair<string, string>("refresh_token", store.RefreshToken)
                     ]);
                     logger.LogInformation("Calling server to refresh tokens");
                     using var response = await client.SendAsync(request, stoppingToken);
